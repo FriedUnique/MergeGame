@@ -18,15 +18,32 @@ class Text:
         self.txt_surface = font.render(self.text, True, self.color) #change
         self.rect = self.txt_surface.get_rect(topleft=(self.position.x, self.position.y))
 
+    def blit_text(self, surface, text, pos, font):
+        words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
+        space = font.size(' ')[0]  # The width of a space.
+        max_width, max_height = surface.get_size()
+        x, y = pos
+        for line in words:
+            for word in line:
+                word_surface = font.render(word, True, self.color)
+                word_width, word_height = word_surface.get_size()
+                if x + word_width >= max_width:
+                    x = pos[0]  # Reset the x.
+                    y += word_height  # Start on new row.
+                surface.blit(word_surface, (x, y))
+                x += word_width + space
+            x = pos[0]  # Reset the x.
+            y += word_height  # Start on new row.
+
     def draw(self, surface):
         if not self.isActive: return
-
-        surface.blit(self.txt_surface, self.rect) #blit a image
+        
+        self.blit_text(surface, self.text, (self.position.x, self.position.y), self.font)
     
     def changeText(self, newText: str):
         self.text = newText
-        self.txt_surface = self.font.render(self.text, True, self.color) #change
-        self.rect = self.txt_surface.get_rect(topleft=(self.position.x, self.position.y))
+        #self.txt_surface = self.font.render(self.text, True, self.color) #change
+        #self.rect = self.txt_surface.get_rect(topleft=(self.position.x, self.position.y))
     
     def SetActive(self, activate):
         self.isActive = activate

@@ -33,7 +33,7 @@ class Button:
         """
         onClicked is a listener function, will be called when button object is clicked
         """
-        self.position = Vector2(position.x - int(10*scale.x/2), position.y - int(10*scale.y/2))
+        self.position = Vector2(position.x, position.y)
         self.scale = scale
         self.name = name
         self.isActive = active
@@ -44,6 +44,7 @@ class Button:
 
         self.textColor = textColor
         self.font = pygame.font.Font(None, fontSize)
+        self.ready = True
 
         self.textPos = (position.x, position.y)
         self.listener = onClicked
@@ -83,15 +84,17 @@ class Button:
         if not self.isActive: return
 
         try:
-            if pygame.mouse.get_pressed()[0]:
+            if pygame.mouse.get_pressed()[0] and self.ready:
                 if self.buttonRect.collidepoint(pygame.mouse.get_pos()):
                     self.state = Button.ButtonStates.Pressing
 
                     if self.listener != None: self.listener(self) # feeds one positional argument, the button object
+                    self.ready = False
 
                 else:
                     self.state = Button.ButtonStates.Idle
             elif not pygame.mouse.get_pressed()[0]:
+                self.ready = True
                 if self.buttonRect.collidepoint(pygame.mouse.get_pos()):
                     self.state = Button.ButtonStates.Hover
                 else:
