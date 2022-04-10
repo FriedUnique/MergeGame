@@ -16,23 +16,24 @@ class ShopItem:
                                 normalBackground=(38, 41, 84), onHoverBackground=(31, 36, 76), onPressedBackground=(23, 28, 68), textColor=(255, 255, 255))
 
         self.description = Text(Vector2(25, 480), text=descriptionText, color=(0, 0, 0))
+        self.buffLevelDisplay = Text(Vector2(475, 25), text="", color=(255, 255, 255))
 
-    def draw(self, screen):
+    def draw(self, surface):
         if not self.isToggled: return
 
-        self.buyButton.draw(screen)
+        self.buyButton.draw(surface)
 
-        if self.buyButton.state != Button.ButtonStates.Idle and self.canBuy:
-            pygame.draw.rect(screen, (255, 255, 255), (0, 475, 550, 550))
-            self.description.text = self.descriptionText
-            self.description.draw(screen)
-        elif self.buyButton.state != Button.ButtonStates.Idle and not self.canBuy:
-            pygame.draw.rect(screen, (255, 255, 255), (0, 475, 550, 550))
-            self.description.text = "Not enough moneeeyyyyyy"
-            self.description.draw(screen)
+        if self.buyButton.state != Button.ButtonStates.Idle:
+            pygame.draw.rect(surface, (255, 255, 255), (0, 475, 550, 550))
+
+            self.description.text = self.descriptionText if self.canBuy else "Not enough moneeeyyyyyy"
+            self.description.draw(surface)
+            self.buffLevelDisplay.draw(surface)
 
     def update(self, price, points, buffLevel):
         self.canBuy = price < points
+        self.buffLevelDisplay.changeText(str(buffLevel))
+
         if not self.isToggled: return
 
         self.buyButton.handleEvents(None)

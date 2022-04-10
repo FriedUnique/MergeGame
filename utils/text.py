@@ -16,7 +16,6 @@ class Text:
         self.isActive = active
 
         self.txt_surface = font.render(self.text, True, self.color) #change
-        self.rect = self.txt_surface.get_rect(topleft=(self.position.x, self.position.y))
 
     def blit_text(self, surface, text, pos, font):
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
@@ -42,8 +41,6 @@ class Text:
     
     def changeText(self, newText: str):
         self.text = newText
-        #self.txt_surface = self.font.render(self.text, True, self.color) #change
-        #self.rect = self.txt_surface.get_rect(topleft=(self.position.x, self.position.y))
     
     def SetActive(self, activate):
         self.isActive = activate

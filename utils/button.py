@@ -88,7 +88,7 @@ class Button:
                 if self.buttonRect.collidepoint(pygame.mouse.get_pos()):
                     self.state = Button.ButtonStates.Pressing
 
-                    if self.listener != None: self.listener(self) # feeds one positional argument, the button object
+                    if self.listener != None: self.listener()
                     self.ready = False
 
                 else:
